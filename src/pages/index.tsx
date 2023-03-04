@@ -11,15 +11,15 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Todo App - Test Ophelia for Astrastellar</title>
-        <meta name="description" content="Hello Ophelia, hope you're doing good ! This is your test, we hope that you'll succeed !" />
+        <title>Todo App - Test Desmond for Astrastellar</title>
+        <meta name="description" content="Hello Desmond, hope you're doing good ! This is your test, we hope that you'll succeed !" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        <h1 className="text-4xl text-white max-w-2xl text-center font-bold">Hello Ophelia, I want you to create the Next Best Todo App of the World (joke)</h1>
+        <h1 className="text-4xl text-white max-w-2xl text-center font-bold">Hello Desmond, I want you to create the Next Best Todo App of the World (joke)</h1>
         <div className="mt-10 text-white text-center">
           <h2 className="text-3xl font-bold">Your mission</h2>
-          <p>Ophelia, you will have to create a basic CRUD app for a todo.</p>
+          <p>Desmond, you will have to create a basic CRUD app for a todo.</p>
           <p>So, on this page, we want all the task already created, you can edit them or delete it</p>
           <p>When you click on a task, you can go to a page under /task/[id] for instance in which you have the details of the todo (just to see if you master routing system)</p>
           <p>You have to use Prisma to manage the database which is an SQLite database (by default it is) and to store the todos</p>
@@ -28,7 +28,7 @@ const Home: NextPage = () => {
         </div>
         <div className="flex flex-col w-full gap-5 max-w-3xl text-left my-20">
           <h3 className="text-white text-2xl font-semibold">Todo:</h3>
-          {/* The Next of the todo here, good luck Ophelia :) */}
+          {/* The Next of the todo here, good luck Desmond :) */}
         </div>
       </main>
     </>
