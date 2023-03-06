@@ -1,12 +1,3 @@
-# Instructions
-
-Desmond, you will have to create a basic CRUD app for a todo
-So, on this page, we want all the task already created, you can edit them or delete it
-When you click on a task, you can go to a page under /task/[id] for instance in which you have the details of the todo (just to see if you master routing system)
-You have to use Prisma to manage the database which is an SQLite database (by default it is) and to store the todos
-You have to use ReactQuery to query the database route defined on tRPC backend under the dir /server
-That's all, you can delete these instructions once understood
-
 # Create T3 App
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
