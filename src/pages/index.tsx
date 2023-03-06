@@ -1,34 +1,101 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 import { api } from "~/utils/api";
+import { InputForm } from "~/components/InputForm";
+import { OutlineBtn } from "~/components/OutlineBtn";
+import { TodoItem } from "~/components/TodoItem";
+import { useState } from "react";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const [todoTitle, setTodoTitle] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  // api
+  const newTodo = api.todo.addTodo.useMutation();
+  const { data: todos } = api.todo.getTodos.useQuery();
+
+  const markChecked = api.todo.updateTodo.useMutation();
+  const handleDelete = api.todo.deleteTodo.useMutation();
+
+  const router = useRouter();
 
   return (
     <>
       <Head>
         <title>Todo App - Test Desmond for Astrastellar</title>
-        <meta name="description" content="Hello Desmond, hope you're doing good ! This is your test, we hope that you'll succeed !" />
+        <meta
+          name="description"
+          content="Hello Desmond, hope you're doing good ! This is your test, we hope that you'll succeed !"
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        <h1 className="text-4xl text-white max-w-2xl text-center font-bold">Hello Desmond, I want you to create the Next Best Todo App of the World (joke)</h1>
-        <div className="mt-10 text-white text-center">
-          <h2 className="text-3xl font-bold">Your mission</h2>
-          <p>Desmond, you will have to create a basic CRUD app for a todo.</p>
-          <p>So, on this page, we want all the task already created, you can edit them or delete it</p>
-          <p>When you click on a task, you can go to a page under /task/[id] for instance in which you have the details of the todo (just to see if you master routing system)</p>
-          <p>You have to use Prisma to manage the database which is an SQLite database (by default it is) and to store the todos</p>
-          <p>You have to use ReactQuery to query the database route defined on tRPC backend under the dir /server</p>
-          <p>That&apos;all, you can delete these instructions once understood</p>
-        </div>
-        <div className="flex flex-col w-full gap-5 max-w-3xl text-left my-20">
-          <h3 className="text-white text-2xl font-semibold">Todo:</h3>
-          {/* The Next of the todo here, good luck Desmond :) */}
+      <main className="flex h-screen items-center justify-center overflow-hidden bg-gradient-to-b from-[#2e026d] to-[#15162c]">
+        <div className="m-4 w-full rounded bg-white p-6 shadow lg:w-3/4 lg:max-w-lg">
+          <div className="mb-4">
+            <h1 className="text-grey-darkest text-center font-bold">
+              Todo List
+            </h1>
+            <div className="mt-4 flex">
+              <InputForm
+                placeholder="Add todo"
+                value={todoTitle}
+                onChange={(e) => {
+                  setTodoTitle(e.target.value);
+                }}
+              />
+              <OutlineBtn
+                label="Add"
+                onClick={() => {
+                  // check validation
+                  if (todoTitle !== "") {
+                    newTodo.mutate({ title: todoTitle, isCompleted: false });
+                    setTodoTitle("");
+                    setErrorMsg("");
+
+                    router.reload();
+                  } else {
+                    setErrorMsg("Todo can't be empty");
+                  }
+                }}
+              />
+            </div>
+            {errorMsg !== "" ? (
+              <div className="color-white mt-2 rounded-md bg-red-300 p-2 text-center">
+                <p>{errorMsg}</p>
+              </div>
+            ) : (
+              <div />
+            )}
+          </div>
+          <div>
+            {/* list all todos */}
+            {todos?.map((todo, indx) => (
+              <TodoItem
+                key={indx}
+                id={todo.id}
+                title={todo.title}
+                iscompleted={todo.isCompleted ?? false}
+                onChecked={() => {
+                  markChecked.mutate({
+                    id: parseInt(`${todo.id}`),
+                    title: todo.title,
+                    isCompleted: !todo.isCompleted,
+                  });
+
+                  router.reload();
+                }}
+                onDelete={() => {
+                  handleDelete.mutate({
+                    id: parseInt(`${todo.id}`),
+                  });
+                  router.reload();
+                }}
+              />
+            ))}
+          </div>
         </div>
       </main>
     </>
@@ -42,7 +109,7 @@ const AuthShowcase: React.FC = () => {
 
   const { data: secretMessage } = api.example.getSecretMessage.useQuery(
     undefined, // no input
-    { enabled: sessionData?.user !== undefined },
+    { enabled: sessionData?.user !== undefined }
   );
 
   return (
